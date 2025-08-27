@@ -12,7 +12,7 @@ To use this [`copier`](https://copier.readthedocs.io) template:
 3. Initialize `copier` template directly from Git:
 
    ```bash
-   copier copy --UNSAFE gh:edgarrmondragon/singer-tap-copier-template path/to/destination
+   copier copy --UNSAFE gh:reservoir-data/singer-tap-copier-template path/to/destination
    ```
 
    Or locally from an already-cloned template repo:

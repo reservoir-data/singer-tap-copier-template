@@ -3,8 +3,9 @@
 
   // https://docs.renovatebot.com/configuration-options/#extends
   "extends": [
-    // https://github.com/edgarrmondragon/.github/blob/main/renovate/base.json5
-    "edgarrmondragon/.github//renovate/base.json5",
+    // https://docs.renovatebot.com/config-presets/#grouporganization-level-presets
+    // https://github.com/reservoir-data/.github/blob/main/.github/renovate.json5
+    "reservoir-data/.github//.github/renovate.json5"
   ],
 
   // https://docs.renovatebot.com/configuration-options/#reviewers
