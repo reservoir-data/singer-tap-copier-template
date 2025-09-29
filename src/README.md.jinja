@@ -40,7 +40,7 @@ You can easily run `[[ tap_id ]]` by itself or in a pipeline using [Meltano](htt
 
 ### Initialize your Development Environment
 
-1. Install [`hatch`](https://hatch.pypa.io/latest/install/).
+1. Install [`tox`](https://tox.wiki/en/latest/installation.html).
 1. Install [`meltano`](https://docs.meltano.com/getting-started/installation).
 
 ### Running Integration Tests
@@ -48,13 +48,13 @@ You can easily run `[[ tap_id ]]` by itself or in a pipeline using [Meltano](htt
 Run integration tests:
 
 ```bash
-hatch run test:integration
+tox -e 3.14
 ```
 
 You can also test the `[[ tap_package_command_line_name ]]` CLI interface directly:
 
 ```bash
-hatch run sync:console -- --about --format=json
+uv run [[ tap_package_command_line_name ]] --about --format=json
 ```
 
 ### Testing with [Meltano](https://www.meltano.com)
