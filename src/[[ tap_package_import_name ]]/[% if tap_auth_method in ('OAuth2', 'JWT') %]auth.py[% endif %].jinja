@@ -4,13 +4,13 @@
 
 from __future__ import annotations
 
-import typing as t
-
 [%- if tap_auth_method not in ("Basic Auth", "OAuth2", "JWT") %]
 # TODO([[ author_username ]]): Delete this file or add custom authentication
 # logic as needed.
 
 [%- elif tap_auth_method == "OAuth2" %]
+import typing as t
+
 from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
 
 
