@@ -9,6 +9,7 @@ from __future__ import annotations
 # logic as needed.
 
 [%- elif tap_auth_method == "OAuth2" %]
+
 import typing as t
 
 from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
@@ -37,6 +38,7 @@ class [[ authenticator ]](OAuthAuthenticator, metaclass=SingletonMeta):
         }
 
 [%- elif tap_auth_method == "JWT" %]
+
 from singer_sdk.authenticators import OAuthJWTAuthenticator
 
 
