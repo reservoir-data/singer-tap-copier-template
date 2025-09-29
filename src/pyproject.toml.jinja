@@ -1,5 +1,6 @@
 [#- renovate: datasource=pypi depName=singer-sdk #]
 [%- set SINGER_SDK_VERSION = "0.49.1" -%]
+[%- set prefix = tap_id|replace('-', '_')|upper -%]
 
 [build-system]
 build-backend = "hatchling.build"
@@ -68,6 +69,7 @@ typing = [
   [%- if tap_stream_type == 'GraphQL' or tap_auth_method == 'Basic Auth' %]
   "types-requests",
   [%- endif %]
+  { include-group = "testing" },
 ]
 
 [tool.hatch.version]
@@ -112,6 +114,46 @@ max_supported_python = "3.14"
 
 [tool.pytest.ini_options]
 addopts = "-vvv --durations=10"
+
+[tool.tox]
+min_version = "4.22"
+requires = [
+  "tox>=4.22",
+  "tox-uv",
+]
+env_list = [
+  "dependencies",
+  "typing",
+  "py314",
+  "py313",
+  "py312",
+  "py311",
+  "py310",
+]
+
+[tool.tox.env_run_base]
+runner = "uv-venv-lock-runner"
+pass_env = [
+  [%- if repository_provider == "github.com" %]
+  "GITHUB_*",
+  [%- endif %]
+  "[[ prefix ]]_*",
+]
+dependency_groups = [ "testing" ]
+commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
+
+[tool.tox.env.dependencies]
+dependency_groups = [ "testing" ]
+commands = [
+  [ "deptry", { replace = "posargs", default = [ "." ], extend = true } ],
+]
+
+[tool.tox.env.typing]
+dependency_groups = [ "typing" ]
+commands = [
+  [ "mypy", { replace = "posargs", default = [ "[[ tap_package_import_name ]]", "tests" ], extend = true } ],
+  [ "ty", "check", { replace = "posargs", default = [ "[[ tap_package_import_name ]]", "tests" ], extend = true } ],
+]
 
 [tool.mypy]
 warn_redundant_casts = true
