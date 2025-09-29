@@ -4,16 +4,14 @@
 
 from __future__ import annotations
 
-import typing as t
-
-if t.TYPE_CHECKING:
-    from singer_sdk.streams.rest import RESTStream
-
 [%- if tap_auth_method not in ("Basic Auth", "OAuth2", "JWT") %]
 # TODO([[ author_username ]]): Delete this file or add custom authentication
 # logic as needed.
 
 [%- elif tap_auth_method == "OAuth2" %]
+
+import typing as t
+
 from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
 
 
@@ -39,49 +37,12 @@ class [[ authenticator ]](OAuthAuthenticator, metaclass=SingletonMeta):
             "grant_type": "password",
         }
 
-    @classmethod
-    def create_for_stream(
-        cls: type[[ '[' ]][[ authenticator ]][[ ']' ]],
-        stream: RESTStream[t.Any],
-    ) -> [[ authenticator ]]:
-        """Create authenticator instance from a stream object.
-
-        Args:
-            stream: An SDK Stream instance.
-
-        Returns:
-            An authenticator instance.
-        """
-        return cls(
-            stream=stream,
-            auth_endpoint="TODO: OAuth Endpoint URL",
-            oauth_scopes="TODO: OAuth Scopes",
-        )
-
 [%- elif tap_auth_method == "JWT" %]
+
 from singer_sdk.authenticators import OAuthJWTAuthenticator
 
 
 class [[ authenticator ]](OAuthJWTAuthenticator):
     """Authenticator class for [[ tap_source_name ]]."""
-
-    @classmethod
-    def create_for_stream(
-        cls: type[[ '[' ]][[ authenticator ]][[ ']' ]],
-        stream: RESTStream[t.Any],
-    ) -> [[ authenticator ]]:
-        """Create authenticator instance from a stream object.
-
-        Args:
-            stream: An SDK Stream instance.
-
-        Returns:
-            An authenticator instance.
-        """
-        return cls(
-            stream=stream,
-            auth_endpoint="TODO: OAuth Endpoint URL",
-            oauth_scopes="TODO: OAuth Scopes",
-        )
 
 [%- endif %]
