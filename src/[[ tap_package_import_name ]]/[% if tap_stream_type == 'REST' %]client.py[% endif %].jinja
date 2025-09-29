@@ -44,7 +44,12 @@ class [[ base_stream ]]([[ tap_stream_type ]]Stream[t.Any]):
         Returns:
             The authenticator instance for this REST stream.
         """
-        return [[ authenticator ]].create_for_stream(self)
+        return [[ authenticator ]](
+            oauth_endpoint="TODO",
+            oauth_scopes="TODO",
+            cliend_id=self.config["client_id"],
+            client_secret=self.config["client_secret"],
+        )
 
 [%- elif tap_auth_method == "API Key" %]
 
@@ -55,11 +60,9 @@ class [[ base_stream ]]([[ tap_stream_type ]]Stream[t.Any]):
         Returns:
             The authenticator instance for this REST stream.
         """
-        api_key: str = self.config["api_key"]
-        return APIKeyAuthenticator.create_for_stream(
-            self,
+        return APIKeyAuthenticator(
             key="x-api-key",
-            value=api_key,
+            value=self.config["api_key"],
             location="header",
         )
 
@@ -72,11 +75,7 @@ class [[ base_stream ]]([[ tap_stream_type ]]Stream[t.Any]):
         Returns:
             The authenticator instance for this REST stream.
         """
-        token: str = self.config["token"]
-        return BearerTokenAuthenticator.create_for_stream(
-            self,
-            token=token,
-        )
+        return BearerTokenAuthenticator(token=self.config["token"])
 
 [%- elif tap_auth_method == "Basic Auth" %]
 

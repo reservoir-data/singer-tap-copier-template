@@ -39,49 +39,11 @@ class [[ authenticator ]](OAuthAuthenticator, metaclass=SingletonMeta):
             "grant_type": "password",
         }
 
-    @classmethod
-    def create_for_stream(
-        cls: type[[ '[' ]][[ authenticator ]][[ ']' ]],
-        stream: RESTStream[t.Any],
-    ) -> [[ authenticator ]]:
-        """Create authenticator instance from a stream object.
-
-        Args:
-            stream: An SDK Stream instance.
-
-        Returns:
-            An authenticator instance.
-        """
-        return cls(
-            stream=stream,
-            auth_endpoint="TODO: OAuth Endpoint URL",
-            oauth_scopes="TODO: OAuth Scopes",
-        )
-
 [%- elif tap_auth_method == "JWT" %]
 from singer_sdk.authenticators import OAuthJWTAuthenticator
 
 
 class [[ authenticator ]](OAuthJWTAuthenticator):
     """Authenticator class for [[ tap_source_name ]]."""
-
-    @classmethod
-    def create_for_stream(
-        cls: type[[ '[' ]][[ authenticator ]][[ ']' ]],
-        stream: RESTStream[t.Any],
-    ) -> [[ authenticator ]]:
-        """Create authenticator instance from a stream object.
-
-        Args:
-            stream: An SDK Stream instance.
-
-        Returns:
-            An authenticator instance.
-        """
-        return cls(
-            stream=stream,
-            auth_endpoint="TODO: OAuth Endpoint URL",
-            oauth_scopes="TODO: OAuth Scopes",
-        )
 
 [%- endif %]

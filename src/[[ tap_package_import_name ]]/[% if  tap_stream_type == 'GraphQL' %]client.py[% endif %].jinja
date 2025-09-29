@@ -32,7 +32,12 @@ class [[ base_stream ]]([[ tap_stream_type ]]Stream[int]):
         Returns:
             The authenticator instance for this GraphQL stream.
         """
-        return [[ authenticator ]].create_for_stream(self)
+        return [[ authenticator ]](
+            oauth_endpoint="TODO",
+            oauth_scopes="TODO",
+            cliend_id=self.config["client_id"],
+            client_secret=self.config["client_secret"],
+        )
 
 [%- endif %]
 
