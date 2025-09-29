@@ -63,7 +63,8 @@ testing = [
   "singer-sdk[testing]",
 ]
 typing = [
-  "mypy",
+  "mypy>=1.18",
+  "ty>=0.0.1a21",
   [%- if tap_stream_type == 'GraphQL' or tap_auth_method == 'Basic Auth' %]
   "types-requests",
   [%- endif %]
