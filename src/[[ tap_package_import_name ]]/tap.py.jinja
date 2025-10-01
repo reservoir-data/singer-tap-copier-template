@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-import typing as t
+import sys
+from typing import TYPE_CHECKING, Any
 
 from singer_sdk import Stream, Tap
 from singer_sdk import typing as th
@@ -10,12 +11,17 @@ from singer_sdk import typing as th
 # TODO([[ author_username ]]): Import your custom stream types here:
 from [[ tap_package_import_name ]] import streams
 
-if t.TYPE_CHECKING:
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
+
+if TYPE_CHECKING:
     from singer_sdk.streams import [[ tap_stream_type ]]Stream
 
 # TODO([[ author_username ]]): Compile a list of custom stream types here
 # OR rewrite discover_streams() below with your custom logic.
-STREAM_TYPES: list [%-raw-%] [ [%-endraw-%] type [%-raw-%] [ [%-endraw-%] [[ tap_stream_type ]]Stream[t.Any] [%-raw-%] ] [%-endraw-%] [%-raw-%] ] [%-endraw%] = [
+STREAM_TYPES: list [%-raw-%] [ [%-endraw-%] type [%-raw-%] [ [%-endraw-%] [[ tap_stream_type ]]Stream[Any] [%-raw-%] ] [%-endraw-%] [%-raw-%] ] [%-endraw%] = [
     streams.Users,
     streams.Groups,
 ]
@@ -89,10 +95,6 @@ class Tap[[ tap_source_id ]](Tap):
         ),
     ).to_dict()
 
+    @override
     def discover_streams(self) -> list[Stream]:
-        """Return a list of discovered streams.
-
-        Returns:
-            A list of [[ tap_source_name ]] streams.
-        """
         return [stream_class(tap=self) for stream_class in STREAM_TYPES]

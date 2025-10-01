@@ -5,7 +5,8 @@
 
 from __future__ import annotations
 
-import typing as t
+import sys
+from typing import TYPE_CHECKING, Any
 
 [% if tap_auth_method == "Basic Auth" -%]
 from requests.auth import HTTPBasicAuth
@@ -24,11 +25,16 @@ from singer_sdk.authenticators import BearerTokenAuthenticator
 from [[ tap_package_import_name ]].auth import [[ authenticator ]]
 [%- endif %]
 
-if t.TYPE_CHECKING:
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
+
+if TYPE_CHECKING:
     from singer_sdk.helpers.types import Context
 
 
-class [[ base_stream ]]([[ tap_stream_type ]]Stream[t.Any]):
+class [[ base_stream ]]([[ tap_stream_type ]]Stream[Any]):
     """[[ tap_source_name ]] stream class."""
 
     url_base = "https://api.mysample.com"
@@ -37,13 +43,9 @@ class [[ base_stream ]]([[ tap_stream_type ]]Stream[t.Any]):
 
 [%- if tap_auth_method in ("OAuth2", "JWT") %]
 
+    @override
     @property
     def authenticator(self) -> [[ authenticator ]]:
-        """Get an authenticator object.
-
-        Returns:
-            The authenticator instance for this REST stream.
-        """
         return [[ authenticator ]](
             oauth_endpoint="TODO",
             oauth_scopes="TODO",
@@ -53,13 +55,9 @@ class [[ base_stream ]]([[ tap_stream_type ]]Stream[t.Any]):
 
 [%- elif tap_auth_method == "API Key" %]
 
+    @override
     @property
     def authenticator(self) -> APIKeyAuthenticator:
-        """Get an authenticator object.
-
-        Returns:
-            The authenticator instance for this REST stream.
-        """
         return APIKeyAuthenticator(
             key="x-api-key",
             value=self.config["api_key"],
@@ -68,50 +66,29 @@ class [[ base_stream ]]([[ tap_stream_type ]]Stream[t.Any]):
 
 [%- elif tap_auth_method == "Bearer Token" %]
 
+    @override
     @property
     def authenticator(self) -> BearerTokenAuthenticator:
-        """Get an authenticator object.
-
-        Returns:
-            The authenticator instance for this REST stream.
-        """
         return BearerTokenAuthenticator(token=self.config["token"])
 
 [%- elif tap_auth_method == "Basic Auth" %]
 
+    @override
     @property
     def authenticator(self) -> HTTPBasicAuth:
-        """Get an authenticator object.
-
-        Returns:
-            The authenticator instance for this REST stream.
-        """
         return HTTPBasicAuth(self.config["username"], self.config["password"])
 
 [%- endif %]
 
+    @override
     @property
     def http_headers(self) -> dict[str, str]:
-        """Return the http headers needed.
+        return {**super().http_headers}
 
-        Returns:
-            A dictionary of HTTP headers.
-        """
-        return {"User-Agent": f"{self.tap_name}/{self._tap.plugin_version}"}
-
+    @override
     def get_url_params(
         self,
-        context: Context | None,  # noqa: ARG002
-        next_page_token: t.Any | None,  # noqa: ARG002, ANN401
-    ) -> dict[str, t.Any]:
-        """Get URL query parameters.
-
-        Args:
-            context: Stream sync context.
-            next_page_token: Next offset.
-
-        Returns:
-            Mapping of URL query parameters.
-        """
-        params: dict[str, t.Any] = {}
-        return params
+        context: Context | None,
+        next_page_token: Any | None,
+    ) -> dict[str, Any] | str:
+        return super().get_url_params(context, next_page_token)

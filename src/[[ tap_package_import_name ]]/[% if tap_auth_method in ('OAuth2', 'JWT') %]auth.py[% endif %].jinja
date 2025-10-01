@@ -10,9 +10,15 @@ from __future__ import annotations
 
 [%- elif tap_auth_method == "OAuth2" %]
 
-import typing as t
+import sys
+from typing import Any
 
 from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
+
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
 
 
 # The SingletonMeta metaclass makes your streams reuse the same authenticator instance.
@@ -20,21 +26,15 @@ from singer_sdk.authenticators import OAuthAuthenticator, SingletonMeta
 class [[ authenticator ]](OAuthAuthenticator, metaclass=SingletonMeta):
     """Authenticator class for [[ tap_source_name ]]."""
 
+    @override
     @property
-    def oauth_request_body(self) -> dict[str, t.Any]:
-        """Define the OAuth request body for the [[ tap_source_name ]] API.
-
-        Returns:
-            Dictionary with request body for OAuth endpoint.
-        """
+    def oauth_request_body(self) -> dict[str, Any]:
         # TODO([[ author_username ]]): Define the request body needed for the API.
         return {
-            "resource": "https://analysis.windows.net/powerbi/api",
             "scope": self.oauth_scopes,
-            "client_id": self.config["client_id"],
-            "username": self.config["username"],
-            "password": self.config["password"],
-            "grant_type": "password",
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "grant_type": "client_credentials",
         }
 
 [%- elif tap_auth_method == "JWT" %]

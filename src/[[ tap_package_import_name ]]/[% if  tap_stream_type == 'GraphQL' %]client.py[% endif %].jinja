@@ -5,7 +5,7 @@
 
 from __future__ import annotations
 
-import typing as t
+import sys
 
 from singer_sdk.streams import [[ tap_stream_type ]]Stream
 
@@ -14,8 +14,10 @@ from singer_sdk.streams import [[ tap_stream_type ]]Stream
 from [[ tap_package_import_name ]].auth import [[ authenticator ]]
 [%- endif %]
 
-if t.TYPE_CHECKING:
-    import requests
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
 
 
 class [[ base_stream ]]([[ tap_stream_type ]]Stream[int]):
@@ -25,13 +27,9 @@ class [[ base_stream ]]([[ tap_stream_type ]]Stream[int]):
 
 [%- if tap_auth_method in ("OAuth2", "JWT") %]
 
+    @override
     @property
     def authenticator(self) -> [[ authenticator ]]:
-        """Get an authenticator object.
-
-        Returns:
-            The authenticator instance for this GraphQL stream.
-        """
         return [[ authenticator ]](
             oauth_endpoint="TODO",
             oauth_scopes="TODO",
@@ -41,29 +39,7 @@ class [[ base_stream ]]([[ tap_stream_type ]]Stream[int]):
 
 [%- endif %]
 
+    @override
     @property
     def http_headers(self) -> dict[str, str]:
-        """Return the http headers needed.
-
-        Returns:
-            A dictionary of HTTP headers.
-        """
-        headers = {}
-        headers["User-Agent"] = f"{self.tap_name}/{self._tap.plugin_version}"
-        return headers
-
-    def parse_response(
-        self,
-        response: requests.Response,
-    ) -> t.Iterable[dict[str, t.Any]]:
-        """Parse the response and return an iterator of result rows.
-
-        Args:
-            response: API response.
-
-        Yields:
-            Raw stream records.
-        """
-        # TODO([[ author_username ]]): Parse response body and return a set of records.
-        resp_json = response.json()
-        yield from resp_json.get("<TODO>")
+        return {**super().http_headers}

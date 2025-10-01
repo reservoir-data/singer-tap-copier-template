@@ -47,6 +47,7 @@ dependencies = [
   [%- else %]
   "singer-sdk~=[[ SINGER_SDK_VERSION ]]",
   [%- endif %]
+  "typing-extensions>=4.15; python_full_version<'3.12'",
 ]
 urls.Documentation = "https://[[ repository_provider ]]/[[ repository_namespace ]]/[[ repository_name ]]#readme"
 urls.Homepage = "https://[[ repository_provider ]]/[[ repository_namespace ]]/[[ repository_name ]]"
@@ -163,11 +164,5 @@ warn_unreachable = true
 warn_unused_configs = true
 warn_unused_ignores = true
 
-[% raw %][[tool.mypy.overrides]][% endraw %]
-ignore_missing_imports = true
-module = [
-  "backoff.*",
-]
-
 [tool.uv]
-required-version = ">=0.6"
+required-version = ">=0.8"
