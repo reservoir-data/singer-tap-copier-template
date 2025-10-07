@@ -5,7 +5,7 @@
 
 from __future__ import annotations
 
-import sys
+from typing import override
 
 from singer_sdk.streams import [[ tap_stream_type ]]Stream
 
@@ -13,11 +13,6 @@ from singer_sdk.streams import [[ tap_stream_type ]]Stream
 
 from [[ tap_package_import_name ]].auth import [[ authenticator ]]
 [%- endif %]
-
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override
 
 
 class [[ base_stream ]]([[ tap_stream_type ]]Stream[int]):

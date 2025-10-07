@@ -5,8 +5,7 @@
 
 from __future__ import annotations
 
-import sys
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, override
 
 [% if tap_auth_method == "Basic Auth" -%]
 from requests.auth import HTTPBasicAuth
@@ -24,11 +23,6 @@ from singer_sdk.authenticators import BearerTokenAuthenticator
 
 from [[ tap_package_import_name ]].auth import [[ authenticator ]]
 [%- endif %]
-
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override
 
 if TYPE_CHECKING:
     from singer_sdk.helpers.types import Context
