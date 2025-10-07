@@ -26,11 +26,9 @@ maintainers = [
 authors = [
   { name = "[[ author_fullname ]]", email = "[[ author_email ]]" },
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
@@ -47,7 +45,6 @@ dependencies = [
   [%- else %]
   "singer-sdk~=[[ SINGER_SDK_VERSION ]]",
   [%- endif %]
-  "typing-extensions>=4.15; python_full_version<'3.12'",
 ]
 urls.Documentation = "https://[[ repository_provider ]]/[[ repository_namespace ]]/[[ repository_name ]]#readme"
 urls.Homepage = "https://[[ repository_provider ]]/[[ repository_namespace ]]/[[ repository_name ]]"
