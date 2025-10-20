@@ -32,9 +32,9 @@ env:
   # renovate: datasource=pypi depName=pre-commit-uv
   PRE_COMMIT_UV_VERSION: 4.1.5
   # renovate: datasource=pypi depName=tox
-  TOX_VERSION: 4.30.3
+  TOX_VERSION: 4.31.0
   # renovate: datasource=pypi depName=tox-uv
-  TOX_UV_VERSION: 1.28.0
+  TOX_UV_VERSION: 1.29.0
   # renovate: datasource=pypi depName=uv
   UV_VERSION: 0.8.23
 
