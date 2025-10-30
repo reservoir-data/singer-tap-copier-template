@@ -63,18 +63,15 @@ jobs:
         - "3.12"
         - "3.11"
         - "3.10"
-        include:
-        - { environment: "dependencies", python-version: "3.x" }
-        - { environment: "typing",       python-version: "3.x" }
 
     steps:
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-    - uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5.5.0
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+    - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
       id: setup-python
       with:
         python-version: ${{ matrix.python-version }}
         allow-prereleases: true
-    - uses: astral-sh/setup-uv@0c5e2b8115b80b4c7c5ddf6ffdd634974642d182 # v5.4.1
+    - uses: astral-sh/setup-uv@85856786d1ce8acfbcc2f13a5f3fbd6b938f9f41 # v7.1.2
       with:
         version: "${{ env.UV_VERSION }}"
 
@@ -88,18 +85,34 @@ jobs:
         uvx
         --with tox-uv==${{ env.TOX_UV_VERSION }}
         --with tox==${{ env.TOX_VERSION }}
-        tox -e ${{ matrix.environment || matrix.python-version }}
+        tox -e ${{ matrix.python-version }}
+
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+    - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+      id: setup-python
+    - uses: astral-sh/setup-uv@85856786d1ce8acfbcc2f13a5f3fbd6b938f9f41 # v7.1.2
+      with:
+        version: "${{ env.UV_VERSION }}"
+    - env:
+        UV_PYTHON: ${{ steps.setup-python.outputs.python-path }}
+      run: >
+        uv tool install
+        --with tox-uv==${{ env.TOX_UV_VERSION }}
+        --from tox==${{ env.TOX_VERSION }}
+        tox
+    - name: Static type checking
+      run: tox -e typing
+    - name: Unused, missing and transitive dependencies
+      run: tox -e dependencies
 
 [%- if repository_visibility == 'private' %]
 
   pre-commit:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-    - uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5.5.0
-      with:
-        python-version: "3.x"
-    - uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd  # v3.0.1
-    - uses: pre-commit-ci/lite-action@5d6cc0eb514c891a40562a58a8e71576c5c7fb43  # v1.1.0
-      if: always()
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+    - uses: j178/prek-action@91fd7d7cf70ae1dee9f4f44e7dfa5d1073fe6623 # v1.0.11
 [%- endif %]
