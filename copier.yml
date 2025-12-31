@@ -93,18 +93,6 @@ repository_provider:
   - github.com
   - gitlab.com
 
-dependabot_update_timezone:
-  type: str
-  help: Timezone to use for dependency update schedule
-  default: "Etc/UTC"
-  when: "{{ repository_provider == 'github.com' }}"
-
-dependabot_update_time:
-  type: str
-  help: Time of day to check for dependency updates
-  default: "10:00"
-  when: "{{ repository_provider == 'github.com' }}"
-
 repository_namespace:
   type: str
   help: Your repository namespace
