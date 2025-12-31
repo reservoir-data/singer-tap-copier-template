@@ -114,7 +114,7 @@ repository_visibility:
 python_main_version:
   type: str
   help: Main Python version supported by this project
-  default: "3.13"
+  default: "3.14"
 
 vscode_files:
   type: bool
