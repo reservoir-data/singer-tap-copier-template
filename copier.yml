@@ -5,6 +5,7 @@ _subdirectory: src
 
 _min_copier_version: "9.0.0"
 
+
 _envops:
   autoescape: false
   block_end_string: "%]"
@@ -111,6 +112,14 @@ repository_visibility:
   - public
   - private
 
+dependency_management_tool:
+  type: str
+  help: Which dependency management tool to use?
+  default: Renovate
+  choices:
+  - Renovate
+  - Dependabot
+
 python_main_version:
   type: str
   help: Main Python version supported by this project
@@ -120,3 +129,9 @@ vscode_files:
   type: bool
   help: Add VSCode files for debugging, etc.?
   default: true
+
+# Post-generation tasks
+# ---------------------------------------------------------------------------------------------
+_tasks:
+  - "[% if dependency_management_tool == 'Renovate' and repository_provider == 'github.com' %]rm -f .github/dependabot.yml[% endif %]"
+  - "[% if dependency_management_tool == 'Dependabot' and repository_provider == 'github.com' %]rm -f .github/renovate.json5[% endif %]"
