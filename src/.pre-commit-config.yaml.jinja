@@ -33,16 +33,17 @@ repos:
         args: [--fix, --exit-non-zero-on-fix, --show-fixes]
       - id: ruff-format
 
-  - repo: https://github.com/pre-commit/pre-commit
-    [#- renovate: datasource=github-tags depName=pre-commit/pre-commit #]
-    rev: v4.5.1
-    hooks:
-      - id: validate_manifest
-
   - repo: https://github.com/python-jsonschema/check-jsonschema
     [#- renovate: datasource=github-tags depName=python-jsonschema/check-jsonschema #]
     rev: 0.36.0
     hooks:
+[%- if dependency_management_tool == 'Dependabot' %]
     - id: check-dependabot
+[%- elif dependency_management_tool == 'Renovate' %]
+    - id: check-renovate
+      additional_dependencies:
+      [#- renovate: datasource=pypi depName=pyjson5 #]
+      - pyjson5==2.0.0
+[%- endif %]
     - id: check-github-workflows
     - id: check-meltano

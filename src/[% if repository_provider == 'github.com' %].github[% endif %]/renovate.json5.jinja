@@ -9,24 +9,7 @@
   ],
 
   // https://docs.renovatebot.com/configuration-options/#reviewers
-  "reviewers": ["edgarrmondragon"],
-
-  "customManagers": [
-    {
-      "customType": "regex",
-      "fileMatch": ["^src/pyproject\\.toml\\.jinja$"],
-      "matchStrings": [
-        "\\[#- renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?) #\\]\\s+\\[%- set [A-Za-z0-9_]+?_VERSION\\s*=\\s*[\"']?(?<currentValue>.+?)[\"']? -%\\]\\s"
-      ]
-    },
-    {
-      "customType": "regex",
-      "fileMatch": ["^src/\\.pre-commit-config\\.yaml\\.jinja$"],
-      "matchStrings": [
-        "\\[#- renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?) #\\]\\s+rev: \"?(?<currentValue>\\S+?)\"?\\s+"
-      ]
-    },
-  ],
+  "reviewers": ["[[ author_username ]]"],
 
   // https://docs.renovatebot.com/configuration-options/#packagerules
   "packageRules": [

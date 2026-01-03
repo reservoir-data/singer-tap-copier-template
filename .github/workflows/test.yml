@@ -46,6 +46,7 @@ jobs:
       matrix:
         visibility: ["private", "public"]
         stream_type: ["REST", "GraphQL"]
+        dependency_management_tool: ["Dependabot", "Renovate"]
         auth_method:
         - "API Key"
         - "Bearer Token"
@@ -91,7 +92,7 @@ jobs:
       run: >
         nox
         --install-only
-        -s "lint(visibility='${{ matrix.visibility }}', auth_method='${{ matrix.auth_method }}', stream_type='${{ matrix.stream_type }}')"
+        -s "lint(dependency_management_tool='${{ matrix.dependency_management_tool }}', visibility='${{ matrix.visibility }}', auth_method='${{ matrix.auth_method }}', stream_type='${{ matrix.stream_type }}')"
 
     - name: Run Nox
       env:
@@ -100,4 +101,4 @@ jobs:
         nox
         --reuse-existing-virtualenvs
         --no-install
-        -s "lint(visibility='${{ matrix.visibility }}', auth_method='${{ matrix.auth_method }}', stream_type='${{ matrix.stream_type }}')"
+        -s "lint(dependency_management_tool='${{ matrix.dependency_management_tool }}', visibility='${{ matrix.visibility }}', auth_method='${{ matrix.auth_method }}', stream_type='${{ matrix.stream_type }}')"
