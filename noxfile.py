@@ -55,8 +55,6 @@ def lint(
             "--force",
             "--defaults",
             "-d",
-            f"python_main_version='{session.python}'",
-            "-d",
             f"tap_stream_type={stream_type}",
             "-d",
             f"tap_auth_method={auth_method}",
