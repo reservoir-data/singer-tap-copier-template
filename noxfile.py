@@ -1,4 +1,13 @@
-"""Nox configuration."""
+#!/usr/bin/env -S uv run --script
+
+# /// script
+# dependencies = ["nox"]
+# ///
+
+"""Nox configuration.
+
+Copyright 2022-2026.
+"""
 
 from __future__ import annotations
 
@@ -82,3 +91,7 @@ def lint(
             session.run("cat", ".pre-commit-config.yaml", external=True)
             session.run("cat", "pyproject.toml", external=True)
             session.run("pre-commit", "run", "--all", external=True)
+
+
+if __name__ == "__main__":
+    nox.main()
