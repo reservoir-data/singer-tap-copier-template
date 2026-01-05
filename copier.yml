@@ -120,11 +120,6 @@ dependency_management_tool:
   - Renovate
   - Dependabot
 
-python_main_version:
-  type: str
-  help: Main Python version supported by this project
-  default: "3.14"
-
 vscode_files:
   type: bool
   help: Add VSCode files for debugging, etc.?
