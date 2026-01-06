@@ -1,4 +1,4 @@
-version: 1
+requires_meltano: ">=4.0"
 send_anonymous_usage_stats: false
 project_id: [[ tap_id ]]
 default_environment: dev
@@ -21,6 +21,7 @@ plugins:
     - discover
     - about
     - stream-maps
+    - structured-logging
 
     settings:
     # TODO: To configure using Meltano, declare settings and their types here:
