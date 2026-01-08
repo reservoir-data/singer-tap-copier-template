@@ -23,16 +23,16 @@ on:
     - [[ tap_package_import_name ]]/**
     - tests/**
     - pyproject.toml
+    - uv.lock
     - .github/workflows/test.yml
-    - .github/workflows/constraints.txt
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
     - [[ tap_package_import_name ]]/**
     - tests/**
     - pyproject.toml
+    - uv.lock
     - .github/workflows/test.yml
-    - .github/workflows/constraints.txt
   workflow_dispatch:
   schedule:
   # Run weekly on Monday at 12:00 PM UTC
