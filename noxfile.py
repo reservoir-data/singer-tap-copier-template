@@ -90,6 +90,7 @@ def lint(
             session.run("tox", "-e", "typing", external=True)
             session.run("cat", ".pre-commit-config.yaml", external=True)
             session.run("cat", "pyproject.toml", external=True)
+            session.run("zizmor", "--collect=all", "--pedantic", ".github", external=True)
             session.run("pre-commit", "run", "--all", external=True)
 
 

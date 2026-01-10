@@ -51,6 +51,8 @@ env:
   # renovate: datasource=pypi depName=uv
   UV_VERSION: "0.9.22"
 
+permissions: {}
+
 jobs:
   test:
     name: Integration
@@ -67,6 +69,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      with:
+        persist-credentials: false
     - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
       id: setup-python
       with:
@@ -78,21 +82,24 @@ jobs:
 
     - name: Run tests
       env:
+        PYTHON_VERSION: ${{ steps.setup-python.outputs.python-version }}
         UV_PYTHON: ${{ steps.setup-python.outputs.python-path }}
         [%- for env in passenv %]
         [[ env ]]: ${{ secrets.[[ env ]] }}
         [%- endfor %]
       run: >
         uvx
-        --with tox-uv==${{ env.TOX_UV_VERSION }}
-        --with tox==${{ env.TOX_VERSION }}
-        tox -e ${{ matrix.python-version }}
+        --with tox-uv==${TOX_UV_VERSION}
+        --with tox==${TOX_VERSION}
+        tox -e ${PYTHON_VERSION}
 
   lint:
     name: Lint
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      with:
+        persist-credentials: false
     - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
       id: setup-python
     - uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
@@ -102,8 +109,8 @@ jobs:
         UV_PYTHON: ${{ steps.setup-python.outputs.python-path }}
       run: >
         uv tool install
-        --with tox-uv==${{ env.TOX_UV_VERSION }}
-        --from tox==${{ env.TOX_VERSION }}
+        --with tox-uv==${TOX_UV_VERSION}
+        --from tox==${TOX_VERSION}
         tox
     - name: Static type checking
       run: tox -e typing
@@ -117,5 +124,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      with:
+        persist-credentials: false
     - uses: j178/prek-action@91fd7d7cf70ae1dee9f4f44e7dfa5d1073fe6623 # v1.0.11
 [%- endif %]
