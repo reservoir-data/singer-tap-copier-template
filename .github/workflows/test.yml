@@ -37,9 +37,14 @@ env:
   TOX_UV_VERSION: 1.29.0
   # renovate: datasource=pypi depName=uv
   UV_VERSION: 0.9.18
+  # renovate: datasource=pypi depName=zizmor
+  ZIZMOR_VERSION: 1.20.0
+
+permissions: {}
 
 jobs:
   linting:
+    name: Lint Templates
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
@@ -59,6 +64,7 @@ jobs:
     - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       with:
         fetch-depth: 0
+        persist-credentials: false
 
     - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
       with:
@@ -70,22 +76,27 @@ jobs:
 
     - name: Install copier
       run: |
-        uv tool install --with copier==${{ env.COPIER_VERSION }} copier
+        uv tool install --with copier==${COPIER_VERSION} copier
         copier --version
 
     - name: Install Nox
       run: |
-        uv tool install --with nox==${{ env.NOX_VERSION }} nox
+        uv tool install --with nox==${NOX_VERSION} nox
         nox --version
 
     - name: Install Tox
       run: |
-        uv tool install --with tox-uv==${{ env.TOX_UV_VERSION }} --with tox==${{ env.TOX_VERSION }} tox
+        uv tool install --with tox-uv==${TOX_UV_VERSION} --with tox==${TOX_VERSION} tox
         tox --version
+
+    - name: Install zizmor
+      run: |
+        uv tool install --with zizmor==${ZIZMOR_VERSION} zizmor
+        zizmor --version
 
     - name: Install pre-commit
       run: |
-        uv tool install --with pre-commit-uv==${{ env.PRE_COMMIT_UV_VERSION }} --with pre-commit==${{ env.PRE_COMMIT_VERSION }} pre-commit
+        uv tool install --with pre-commit-uv==${PRE_COMMIT_UV_VERSION} --with pre-commit==${PRE_COMMIT_VERSION} pre-commit
         pre-commit --version
 
     - name: Install dependencies
