@@ -48,6 +48,7 @@ repos:
     - id: check-dependabot
 [%- elif dependency_management_tool == 'Renovate' %]
     - id: check-renovate
+      language: python
       additional_dependencies:
       [#- renovate: datasource=pypi depName=pyjson5 #]
       - pyjson5==2.0.0
