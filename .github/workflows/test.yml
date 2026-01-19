@@ -36,7 +36,7 @@ env:
   # renovate: datasource=pypi depName=tox-uv
   TOX_UV_VERSION: 1.29.0
   # renovate: datasource=pypi depName=uv
-  UV_VERSION: 0.9.18
+  UV_VERSION: 0.9.24
   # renovate: datasource=pypi depName=zizmor
   ZIZMOR_VERSION: 1.20.0
 
