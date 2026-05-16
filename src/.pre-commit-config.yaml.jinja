@@ -21,13 +21,13 @@ repos:
 
   - repo: https://github.com/tox-dev/pyproject-fmt
     [#- renovate: datasource=github-tags depName=tox-dev/pyproject-fmt #]
-    rev: v2.11.1
+    rev: v2.21.2
     hooks:
       - id: pyproject-fmt
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     [#- renovate: datasource=github-tags depName=astral-sh/ruff-pre-commit #]
-    rev: v0.15.2
+    rev: v0.15.13
     hooks:
       - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix, --show-fixes]
@@ -35,14 +35,14 @@ repos:
 
   - repo: https://github.com/astral-sh/uv-pre-commit
     [#- renovate: datasource=github-tags depName=astral-sh/uv-pre-commit #]
-    rev: 0.9.29
+    rev: 0.11.14
     hooks:
       - id: uv-lock
       - id: uv-sync
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     [#- renovate: datasource=github-tags depName=python-jsonschema/check-jsonschema #]
-    rev: 0.36.0
+    rev: 0.37.2
     hooks:
 [%- if dependency_management_tool == 'Dependabot' %]
     - id: check-dependabot
