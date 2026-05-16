@@ -91,7 +91,7 @@ def lint(
             session.run("cat", ".pre-commit-config.yaml", external=True)
             session.run("cat", "pyproject.toml", external=True)
             session.run("zizmor", "--collect=all", "--pedantic", ".github", external=True)
-            session.run("pre-commit", "run", "--all", external=True)
+            session.run("prek", "run", "--all-files", external=True)
 
 
 if __name__ == "__main__":

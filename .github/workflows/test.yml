@@ -24,21 +24,19 @@ concurrency:
 env:
   FORCE_COLOR: "1"
   # renovate: datasource=pypi depName=copier
-  COPIER_VERSION: 9.12.0
+  COPIER_VERSION: 9.15.1
   # renovate: datasource=pypi depName=nox
-  NOX_VERSION: 2025.11.12
-  # renovate: datasource=pypi depName=pre-commit
-  PRE_COMMIT_VERSION: 4.5.1
-  # renovate: datasource=pypi depName=pre-commit-uv
-  PRE_COMMIT_UV_VERSION: 4.2.0
+  NOX_VERSION: 2026.4.10
+  # renovate: datasource=pypi depName=prek
+  PREK_VERSION: 0.4.0
   # renovate: datasource=pypi depName=tox
-  TOX_VERSION: 4.34.1
+  TOX_VERSION: 4.54.0
   # renovate: datasource=pypi depName=tox-uv
-  TOX_UV_VERSION: 1.29.0
+  TOX_UV_VERSION: 1.35.2
   # renovate: datasource=pypi depName=uv
-  UV_VERSION: 0.9.29
+  UV_VERSION: 0.11.14
   # renovate: datasource=pypi depName=zizmor
-  ZIZMOR_VERSION: 1.20.0
+  ZIZMOR_VERSION: 1.25.1
 
 permissions: {}
 
@@ -70,7 +68,7 @@ jobs:
       with:
         python-version: 3.x
 
-    - uses: astral-sh/setup-uv@803947b9bd8e9f986429fa0c5a41c367cd732b41 # v7.2.1
+    - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
       with:
         version: ${{ env.UV_VERSION }}
 
@@ -94,10 +92,10 @@ jobs:
         uv tool install --with zizmor==${ZIZMOR_VERSION} zizmor
         zizmor --version
 
-    - name: Install pre-commit
+    - name: Install prek
       run: |
-        uv tool install --with pre-commit-uv==${PRE_COMMIT_UV_VERSION} --with pre-commit==${PRE_COMMIT_VERSION} pre-commit
-        pre-commit --version
+        uv tool install --with prek==${PREK_VERSION} prek
+        prek --version
 
     - name: Install dependencies
       run: >
