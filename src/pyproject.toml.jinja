@@ -142,25 +142,24 @@ strict = true
 testpaths = [ "tests" ]
 
 [tool.tox]
-min_version = "4.32"
 requires = [
-  "tox>=4.52",
-  "tox-uv",
+  "tox>=4.53",
+  "tox-uv>=1.35",
 ]
 env_list = [
   "dependencies",
   "typing",
-  { product = [
-    { prefix = "py3", start = 12, stop = 14 },
-  ] },
+  { prefix = "3.", start = 12 },
 ]
 [tool.tox.env.dependencies]
+description = "check for unused, missing and transitive dependencies"
 dependency_groups = [ "testing" ]
 commands = [
   [ "deptry", { replace = "posargs", default = [ "." ], extend = true } ],
 ]
 
 [tool.tox.env.typing]
+description = "type checks"
 dependency_groups = [ "typing" ]
 commands = [
   [ "mypy", { replace = "posargs", default = [ "[[ tap_package_import_name ]]", "tests" ], extend = true } ],
@@ -168,6 +167,7 @@ commands = [
 ]
 
 [tool.tox.env_run_base]
+description = "run tests on Python {py_dot_ver}"
 runner = "uv-venv-lock-runner"
 pass_env = [
   [%- if repository_provider == "github.com" %]
