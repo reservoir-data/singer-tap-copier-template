@@ -86,11 +86,12 @@ def lint(
             session.run("git", "init", external=True)
             session.run("git", "add", ".", external=True)
             session.run("uv", "lock")
+            session.run("tox", "l", external=True)
             session.run("tox", "-e", "dependencies", external=True)
             session.run("tox", "-e", "typing", external=True)
             session.run("cat", ".pre-commit-config.yaml", external=True)
             session.run("cat", "pyproject.toml", external=True)
-            session.run("zizmor", "--collect=all", "--pedantic", ".github", external=True)
+            session.run("zizmor", "--collect=all", "--persona=pedantic", ".github", external=True)
             session.run("prek", "run", "--all-files", external=True)
 
 

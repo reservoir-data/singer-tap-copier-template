@@ -3,13 +3,14 @@
 To use this [`copier`](https://copier.readthedocs.io) template:
 
 1. Install [`uv`](https://docs.astral.sh/uv/getting-started/installation/)
-2. Install `copier`:
+
+1. Install `copier`:
 
    ```bash
    uv tool install copier
    ```
 
-3. Initialize `copier` template directly from Git:
+1. Initialize `copier` template directly from Git:
 
    ```bash
    copier copy --UNSAFE gh:reservoir-data/singer-tap-copier-template path/to/destination
