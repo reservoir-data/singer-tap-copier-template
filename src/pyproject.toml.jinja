@@ -1,5 +1,5 @@
 [#- renovate: datasource=pypi depName=singer-sdk #]
-[%- set SINGER_SDK_VERSION = "0.54.4" -%]
+[%- set SINGER_SDK_VERSION = "0.54.5" -%]
 [%- set prefix = tap_id|replace('-', '_')|upper -%]
 
 [build-system]
@@ -54,17 +54,17 @@ Repository = "https://[[ repository_provider ]]/[[ repository_namespace ]]/[[ re
 
 [dependency-groups]
 dev = [
+  "deptry>=0.25",
   { include-group = "testing" },
   { include-group = "typing" },
 ]
 testing = [
-  "deptry>=0.23",
   "pytest>=9",
   "singer-sdk[testing]",
 ]
 typing = [
-  "mypy>=2",
-  "ty>=0.0.30",
+  "mypy>=2.1",
+  "ty>=0.0.50",
   { include-group = "testing" },
 ]
 
@@ -97,17 +97,7 @@ unfixable = [
   "ERA001", # commented-out-code
 ]
 flake8-annotations.allow-star-arg-any = true
-isort.known-first-party = [
-  "[[ tap_package_import_name ]]",
-]
-isort.required-imports = [
-  "from __future__ import annotations",
-]
 pydocstyle.convention = "google"
-
-[tool.deptry.package_module_name_map]
-mypy = "mypy"
-ty = "ty"
 
 [tool.pyproject-fmt]
 table_format = "long"
@@ -143,7 +133,7 @@ testpaths = [ "tests" ]
 
 [tool.tox]
 requires = [
-  "tox>=4.53",
+  "tox>=4.55",
   "tox-uv>=1.35",
 ]
 env_list = [
@@ -153,7 +143,7 @@ env_list = [
 ]
 [tool.tox.env.dependencies]
 description = "check for unused, missing and transitive dependencies"
-dependency_groups = [ "testing" ]
+dependency_groups = [ "dev" ]
 commands = [
   [ "deptry", { replace = "posargs", default = [ "." ], extend = true } ],
 ]
