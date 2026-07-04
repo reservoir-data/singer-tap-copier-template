@@ -38,6 +38,9 @@ on:
   # Run weekly on Monday at 12:00 PM UTC
   - cron: "0 12 * * 1"
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
@@ -45,45 +48,46 @@ concurrency:
 env:
   FORCE_COLOR: "1"
   # renovate: datasource=pypi depName=tox
-  TOX_VERSION: 4.54.0
+  TOX_VERSION: 4.56.1
   # renovate: datasource=pypi depName=tox-uv
   TOX_UV_VERSION: 1.35.2
   # renovate: datasource=pypi depName=uv
-  UV_VERSION: "0.11.16"
-
-permissions: {}
+  UV_VERSION: "0.11.26"
 
 jobs:
-  test:
-    name: Integration
+  build-package:
+    name: Build & verify package
     runs-on: ubuntu-24.04
+    outputs:
+      supported-python-versions: ${{ steps.baipp.outputs.supported_python_classifiers_json_array }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: hynek/build-and-inspect-python-package@d44ca7d91762de7a7d5436ddae667c6da6d1c3df # v2.18.0
+        id: baipp
+
+  test:
+    name: Test
+    runs-on: ubuntu-24.04
+    needs: build-package
     strategy:
       fail-fast: false
       matrix:
-        python-version:
-        - "3.14"
-        - "3.13"
-        - "3.12"
-        - "3.11"
-        - "3.10"
+        python-version: ${{ fromJson(needs.build-package.outputs.supported-python-versions) }}
 
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v7.0.0
       with:
         persist-credentials: false
-    - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-      id: setup-python
+    - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.2.0
       with:
         python-version: ${{ matrix.python-version }}
-        allow-prereleases: true
-    - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
-      with:
         version: "${{ env.UV_VERSION }}"
-
     - name: Run tests
       env:
-        PYTHON_VERSION: ${{ steps.setup-python.outputs.python-version }}
-        UV_PYTHON: ${{ steps.setup-python.outputs.python-path }}
+        PYTHON_VERSION: ${{ matrix.python-version }}
         [%- for env in passenv %]
         [[ env ]]: ${{ secrets.[[ env ]] }}
         [%- endfor %]
@@ -97,17 +101,13 @@ jobs:
     name: Lint
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v7.0.0
       with:
         persist-credentials: false
-    - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
-      id: setup-python
-    - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+    - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.2.0
       with:
         version: "${{ env.UV_VERSION }}"
-    - env:
-        UV_PYTHON: ${{ steps.setup-python.outputs.python-path }}
-      run: >
+    - run: >
         uv tool install
         --with tox-uv==${TOX_UV_VERSION}
         --from tox==${TOX_VERSION}
@@ -123,8 +123,8 @@ jobs:
     name: pre-commit
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v7.0.0
       with:
         persist-credentials: false
-    - uses: j178/prek-action@bdca6f102f98e2b4c7029491a53dfd366469e33d # v2.0.4
+    - uses: j178/prek-action@bdca6f102f98e2b4c7029491a53dfd366469e33d # v2.0.5
 [%- endif %]
