@@ -28,7 +28,7 @@ env:
   # renovate: datasource=pypi depName=nox
   NOX_VERSION: 2026.4.10
   # renovate: datasource=pypi depName=prek
-  PREK_VERSION: 0.4.0
+  PREK_VERSION: 0.5.0
   # renovate: datasource=pypi depName=tox
   TOX_VERSION: 4.54.0
   # renovate: datasource=pypi depName=tox-uv
