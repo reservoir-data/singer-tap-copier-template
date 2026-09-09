@@ -108,7 +108,7 @@ jobs:
     - name: Run Nox
       env:
         # https://github.com/python-jsonschema/check-jsonschema/issues/714
-        PYTHONWARNINGS: "all,error::DeprecationWarning,once::DeprecationWarning:setuptools_scm._get_version_impl,once::DeprecationWarning:check_jsonschema.cli.param_types"
+        PYTHONWARNINGS: "all,error::DeprecationWarning,once::DeprecationWarning:check_jsonschema.cli.param_types"
       run: >
         nox
         --reuse-existing-virtualenvs
