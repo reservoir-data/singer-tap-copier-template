@@ -25,6 +25,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
 ]
 dynamic = [
   "version",
@@ -39,18 +40,18 @@ dependencies = [
   "singer-sdk~=[[ SINGER_SDK_VERSION ]]",
   [%- endif %]
 ]
-[[ "[[project.authors]]" ]]
-name = "[[ author_fullname ]]"
-email = "[[ author_email ]]"
 [[ "[[project.maintainers]]" ]]
 name = "[[ author_fullname ]]"
 email = "[[ author_email ]]"
-[project.scripts]
-[[ tap_package_command_line_name ]] = "[[ tap_package_import_name ]].tap:Tap[[ tap_source_id ]].cli"
+[[ "[[project.authors]]" ]]
+name = "[[ author_fullname ]]"
+email = "[[ author_email ]]"
 [project.urls]
 Documentation = "https://[[ repository_provider ]]/[[ repository_namespace ]]/[[ repository_name ]]#readme"
 Homepage = "https://[[ repository_provider ]]/[[ repository_namespace ]]/[[ repository_name ]]"
 Repository = "https://[[ repository_provider ]]/[[ repository_namespace ]]/[[ repository_name ]]"
+[project.scripts]
+[[ tap_package_command_line_name ]] = "[[ tap_package_import_name ]].tap:Tap[[ tap_source_id ]].cli"
 
 [dependency-groups]
 dev = [
@@ -69,8 +70,8 @@ typing = [
 ]
 
 [tool.hatch.version]
-fallback-version = "0.0.0"
 source = "vcs"
+fallback-version = "0.0.0"
 
 [tool.uv]
 required-version = ">=0.10"
@@ -103,18 +104,18 @@ pydocstyle.convention = "google"
 table_format = "long"
 
 [tool.mypy]
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_return_any = true
+warn_unreachable = true
 enable_error_code = [
   "ignore-without-code",
   "redundant-expr",
   "truthy-bool",
 ]
 strict = true
-warn_redundant_casts = true
-warn_return_any = true
-warn_no_return = true
-warn_unreachable = true
 warn_unused_configs = true
-warn_unused_ignores = true
 
 [tool.pytest]
 addopts = [
@@ -147,7 +148,6 @@ dependency_groups = [ "dev" ]
 commands = [
   [ "deptry", { replace = "posargs", default = [ "." ], extend = true } ],
 ]
-
 [tool.tox.env.typing]
 description = "type checks"
 dependency_groups = [ "typing" ]
@@ -155,15 +155,14 @@ commands = [
   [ "mypy", { replace = "posargs", default = [ "[[ tap_package_import_name ]]", "tests" ], extend = true } ],
   [ "ty", "check", { replace = "posargs", default = [ "[[ tap_package_import_name ]]", "tests" ], extend = true } ],
 ]
-
 [tool.tox.env_run_base]
-description = "run tests on Python {py_dot_ver}"
 runner = "uv-venv-lock-runner"
+description = "run tests on Python {py_dot_ver}"
+dependency_groups = [ "testing" ]
 pass_env = [
   [%- if repository_provider == "github.com" %]
   "GITHUB_*",
   [%- endif %]
   "[[ prefix ]]_*",
 ]
-dependency_groups = [ "testing" ]
 commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]

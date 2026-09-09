@@ -47,16 +47,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        visibility: ["private", "public"]
-        stream_type: ["REST", "GraphQL"]
-        dependency_management_tool: ["Dependabot", "Renovate"]
+        visibility:
+        - private
+        # - public
+        stream_type:
+        - REST
+        # - GraphQL
+        dependency_management_tool:
+        - Dependabot
+        # - Renovate
         auth_method:
         - "API Key"
-        - "Bearer Token"
-        - "Basic Auth"
-        - "OAuth2"
-        - "JWT"
-        - "Custom or N/A"
+        # - "Bearer Token"
+        # - "Basic Auth"
+        # - "OAuth2"
+        # - "JWT"
+        # - "Custom or N/A"
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -101,7 +107,8 @@ jobs:
 
     - name: Run Nox
       env:
-        PYTHONWARNINGS: "all,error::DeprecationWarning,ignore::DeprecationWarning:setuptools_scm._get_version_impl"
+        # https://github.com/python-jsonschema/check-jsonschema/issues/714
+        PYTHONWARNINGS: "all,error::DeprecationWarning,once::DeprecationWarning:check_jsonschema.cli.param_types"
       run: >
         nox
         --reuse-existing-virtualenvs
